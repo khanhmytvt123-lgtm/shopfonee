@@ -1,0 +1,213 @@
+/* Reset & General Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Color Palette: VNB Orange (#f36d21) & Dark Grey */
+:root {
+    --vnb-orange: #f36d21;
+    --vnb-dark: #333;
+    --vnb-hover: #d35400;
+}
+
+/* --- Form Styles (Login & Signup) --- */
+form {
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    border-top: 5px solid var(--vnb-orange);
+}
+
+h2, h1 {
+    text-align: center;
+    color: var(--vnb-dark);
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+}
+
+.form-group, div {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: var(--vnb-orange);
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--vnb-orange);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: var(--vnb-hover);
+}
+
+/* --- Admin Page Styles --- */
+.container {
+    background: #fff;
+    padding: 30px;
+    width: 95%;
+    max-width: 1000px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    align-self: flex-start; /* Để trang admin không bị nhảy giữa màn hình quá mức */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin-bottom: 0;
+    color: var(--vnb-orange);
+}
+
+#logout-btn {
+    width: auto;
+    padding: 8px 15px;
+    background-color: #333;
+    font-size: 0.8rem;
+}
+
+.btn-add {
+    margin-bottom: 20px;
+    background-color: orange;
+}
+
+.btn-add:hover {
+    background-color: orange;
+}
+
+/* Form thêm sản phẩm ẩn/hiện */
+#add-product-form {
+    display: none;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 25px;
+    border: 1px dashed var(--vnb-orange);
+}
+
+#add-product-form.active {
+    display: block;
+}
+
+/* Table Styles */
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th {
+    background-color: var(--vnb-dark);
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+tr:hover {
+    background-color: #fff9f5;
+}
+
+table img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+/* Actions in Table */
+.product-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-edit, .btn-delete {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    width: auto;
+}
+
+.btn-edit {
+    background-color: #2980b9;
+}
+
+.btn-delete {
+    background-color: #c0392b;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    td, th {
+        padding: 8px;
+        font-size: 0.8rem;
+    }
+}
+
