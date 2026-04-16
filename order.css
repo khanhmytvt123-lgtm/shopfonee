@@ -1,0 +1,174 @@
+/* Reset và font chữ cơ bản */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #1a1a1a;
+    color: #eeeeee;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+/* Header */
+h1 {
+    color: #ff8c00; /* Màu cam đậm */
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #262626;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 5px solid #ff8c00;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.header h1 {
+    margin-bottom: 0;
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+#logout-btn {
+    background-color: transparent;
+    color: #ff8c00;
+    border: 2px solid #ff8c00;
+    padding: 8px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+#logout-btn:hover {
+    background-color: #ff8c00;
+    color: #000;
+}
+
+/* Thống kê (Stats) */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: #262626;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s;
+    border-bottom: 3px solid #333;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-bottom: 3px solid #ff8c00;
+}
+
+.stat-card h3 {
+    color: #999;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ff8c00;
+}
+
+/* Bảng dữ liệu */
+.table-container {
+    background: #262626;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+thead {
+    background-color:black;
+    color: #ff8c00;
+}
+
+th, td {
+    padding: 15px;
+    border-bottom: 1px solid #383838;
+}
+
+tr:hover {
+    background-color: #2d2d2d;
+}
+
+.order-id {
+    color: #ff8c00;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+/* Trạng thái và Select */
+.status-select {
+    background-color: #1a1a1a;
+    color: #fff;
+    border: 1px solid #444;
+    padding: 6px;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+}
+
+.status-select:focus {
+    border-color: #ff8c00;
+}
+
+/* Nút Xem */
+.btn-view {
+    background-color: #ff8c00;
+    color: #000;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-view:hover {
+    opacity: 0.8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .table-container {
+        overflow-x: auto;
+    }
+}
