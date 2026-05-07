@@ -25,64 +25,53 @@
             <label for="inp-confirm-pwd">Xác nhận mật khẩu:</label>
             <input type="password" id="inp-confirm-pwd" name="confirm-password" autocomplete="new-password">
         </div>
-        <button type="submit">Đăng ký</button>
+        <button type="submit" id="btn-reg">Đăng ký</button>
     </form>
 
     <script src="https://www.gstatic.com/firebasejs/12.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/12.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore-compat.js"></script>
-    
-    <script src="./configFirebase.js"></script>
+    <script src="./js/configFirebase.js"></script>
 
     <script>
-        const inpUsername = document.querySelector("#inp-username");
-        const inpEmail = document.querySelector("#inp-email");
-        const inpPwd = document.querySelector("#inp-pwd");
-        const inpConfirmPwd = document.querySelector("#inp-confirm-pwd");
         const registerForm = document.querySelector("#register-form");
+        const btnReg = document.querySelector("#btn-reg");
 
-        function handleRegister(event) {
+        registerForm.addEventListener("submit", (event) => {
             event.preventDefault();
+            const username = document.querySelector("#inp-username").value.trim();
+            const email = document.querySelector("#inp-email").value.trim();
+            const password = document.querySelector("#inp-pwd").value;
+            const confirmPassword = document.querySelector("#inp-confirm-pwd").value;
 
-            const username = inpUsername.value.trim();
-            const email = inpEmail.value.trim();
-            const password = inpPwd.value;
-            const confirmPassword = inpConfirmPwd.value;
-
-            // 1. Kiểm tra rỗng
             if (!username || !email || !password || !confirmPassword) {
                 alert("Vui lòng điền đủ các trường");
                 return;
             }
-
-            // 2. Kiểm tra khớp mật khẩu
             if (password !== confirmPassword) {
                 alert("Mật khẩu không khớp");
                 return;
             }
 
-            // 3. Firebase Auth
+            btnReg.innerText = "Đang xử lý...";
+            btnReg.disabled = true;
+
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    const user = userCredential.user;
-                    
-                    // (Tùy chọn) Cập nhật Display Name cho Firebase Auth
-                    return user.updateProfile({
-                        displayName: username
-                    }).then(() => {
-                        alert("Đăng ký thành công!");
-                        window.location.href = "./login.html";
-                    });
+                    return userCredential.user.updateProfile({ displayName: username });
+                })
+                .then(() => {
+                    alert("Đăng ký thành công!");
+                    window.location.href = "./login.html";
                 })
                 .catch((error) => {
-                    // Hiển thị lỗi cụ thể từ Firebase
                     alert("Lỗi: " + error.message);
-                    console.error(error);
+                    btnReg.innerText = "Đăng ký";
+                    btnReg.disabled = false;
                 });
-        }
-
-        registerForm.addEventListener("submit", handleRegister);
+        });
     </script>
 </body>
+</html>
 </html>
     
