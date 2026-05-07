@@ -11,13 +11,22 @@
 <body>
     <div class="container">
         <h1>Trang quản lý admin</h1>
+        <nav class="admin-nav"
+            style="background: #333; padding: 10px; margin-bottom: 20px; border-radius: 8px; display: flex; gap: 20px;">
+            <a href="./admin.html"
+                style="color: white; text-decoration: none; font-weight: bold; padding: 5px 15px; background: #667eea; border-radius: 4px;">Sản
+                phẩm</a>
+            <a href="./order.html" style="color: white; text-decoration: none; padding: 5px 15px;">Đơn hàng</a>
+            <a href="./index.html" style="color: white; text-decoration: none; padding: 5px 15px;">Xem cửa hàng</a>
+        </nav>
+
         <div class="header">
             <h1>Quản lý sản phẩm</h1>
             <button id="logout-btn">Đăng xuất</button>
         </div>
-        
+
         <button id="add-form-btn" class="btn-add">Thêm sản phẩm mới</button>
-        
+
         <div id="add-product-form" class="add-product-form">
             <form id="product-form">
                 <div class="form-group">
@@ -37,7 +46,7 @@
                 </div>
             </form>
         </div>
-        
+
         <div class="table-container">
             <table>
                 <thead>
@@ -59,7 +68,7 @@
     <script src="https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore-compat.js"></script>
     <script src="./js/configFirebase.js"></script>
     <script>
-                document
+        document
             .getElementById("logout-btn")
             .addEventListener("click", function () {
                 if (confirm("Bạn có chắc chắn muốn đăng xuất")) {
@@ -79,7 +88,7 @@
                 }
             });
 
-            //Kiểm tra admin mới được vào
+        //Kiểm tra admin mới được vào
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 if (user.email !== "admin@gmail.com") {
@@ -93,15 +102,15 @@
         });
 
         // Hiển thị form thêm sản phẩm
-        document.getElementById('add-form-btn').addEventListener('click', function() {
+        document.getElementById('add-form-btn').addEventListener('click', function () {
             const form = document.getElementById('add-product-form');
             form.classList.toggle('active');
         });
 
         // Thêm sản phẩm
-        document.getElementById('product-form').addEventListener('submit', function(e) {
+        document.getElementById('product-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             const name = document.getElementById('product-name').value;
             const price = parseFloat(document.getElementById('product-price').value);
             const imageUrl = document.getElementById('product-image').value;
@@ -181,8 +190,93 @@
                 });
         }
         loadProducts();
-    </script>
+        // 1. Hàm mở Modal và đổ dữ liệu hiện tại vào input
+        function editProduct(id) {
+            db.collection("products").doc(id).get().then((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    document.getElementById('edit-product-id').value = id;
+                    document.getElementById('edit-product-name').value = data.name;
+                    document.getElementById('edit-product-price').value = data.price;
+                    document.getElementById('edit-product-image').value = data.imageUrl;
 
+                    document.getElementById('edit-modal').style.display = 'block';
+                } else {
+                    alert("Không tìm thấy sản phẩm!");
+                }
+            }).catch((error) => {
+                console.error("Lỗi lấy dữ liệu: ", error);
+            });
+        }
+
+        // 2. Hàm đóng Modal
+        function closeEditModal() {
+            document.getElementById('edit-modal').style.display = 'none';
+        }
+
+        // 3. Hàm lưu dữ liệu đã sửa lên Firestore
+        function saveProductUpdate() {
+            const id = document.getElementById('edit-product-id').value;
+            const name = document.getElementById('edit-product-name').value.trim();
+            const price = Number(document.getElementById('edit-product-price').value);
+            const imageUrl = document.getElementById('edit-product-image').value.trim();
+
+            if (!name || !price || !imageUrl) {
+                alert("Vui lòng điền đủ thông tin!");
+                return;
+            }
+
+            db.collection("products").doc(id).update({
+                name: name,
+                price: price,
+                imageUrl: imageUrl,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp() // Thêm thời gian cập nhật
+            })
+                .then(() => {
+                    alert("Cập nhật sản phẩm thành công!");
+                    closeEditModal();
+                    // Nếu bạn không dùng onSnapshot thì gọi lại hàm loadProducts() ở đây
+                    // loadProducts(); 
+                })
+                .catch((error) => {
+                    alert("Lỗi khi cập nhật: " + error.message);
+                });
+        }
+
+        // Đóng modal khi click ra ngoài vùng trắng
+        window.onclick = function (event) {
+            const modal = document.getElementById('edit-modal');
+            if (event.target == modal) {
+                closeEditModal();
+            }
+        }
+    </script>
+    <div id="edit-modal" class="modal"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000;">
+        <div style="background:white; width:400px; margin:100px auto; padding:20px; border-radius:8px;">
+            <h3>Chỉnh sửa sản phẩm</h3>
+            <input type="hidden" id="edit-product-id">
+            <div class="form-group">
+                <label>Tên sản phẩm</label>
+                <input type="text" id="edit-product-name" style="width:100%; margin-bottom:10px;">
+            </div>
+            <div class="form-group">
+                <label>Giá</label>
+                <input type="number" id="edit-product-price" style="width:100%; margin-bottom:10px;">
+            </div>
+            <div class="form-group">
+                <label>URL hình ảnh</label>
+                <input type="text" id="edit-product-image" style="width:100%; margin-bottom:10px;">
+            </div>
+            <div style="display:flex; gap:10px; justify-content: flex-end;">
+                <button onclick="closeEditModal()"
+                    style="background:#ccc; border:none; padding:8px 15px; border-radius:4px; cursor:pointer;">Hủy</button>
+                <button onclick="saveProductUpdate()"
+                    style="background:#667eea; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer;">Lưu
+                    thay đổi</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
