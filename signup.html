@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <form id="register-form">
+        <h2>Đăng ký tài khoản</h2>
+        <div>
+            <label for="inp-username">Tên đăng nhập:</label>
+            <input type="text" id="inp-username" name="username">
+        </div>
+        <div>
+            <label for="inp-email">Email:</label>
+            <input type="email" id="inp-email" name="email" autocomplete="email">
+        </div>
+        <div>
+            <label for="inp-pwd">Mật khẩu:</label>
+            <input type="password" id="inp-pwd" name="password" autocomplete="new-password">
+        </div>
+        <div>
+            <label for="inp-confirm-pwd">Xác nhận mật khẩu:</label>
+            <input type="password" id="inp-confirm-pwd" name="confirm-password" autocomplete="new-password">
+        </div>
+        <button type="submit" id="btn-reg">Đăng ký</button>
+    </form>
+
+    <script src="https://www.gstatic.com/firebasejs/12.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore-compat.js"></script>
+    <script src="./js/configFirebase.js"></script>
+
+    <script>
+        const registerForm = document.querySelector("#register-form");
+        const btnReg = document.querySelector("#btn-reg");
+
+        registerForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const username = document.querySelector("#inp-username").value.trim();
+            const email = document.querySelector("#inp-email").value.trim();
+            const password = document.querySelector("#inp-pwd").value;
+            const confirmPassword = document.querySelector("#inp-confirm-pwd").value;
+
+            if (!username || !email || !password || !confirmPassword) {
+                alert("Vui lòng điền đủ các trường");
+                return;
+            }
+            if (password !== confirmPassword) {
+                alert("Mật khẩu không khớp");
+                return;
+            }
+
+            btnReg.innerText = "Đang xử lý...";
+            btnReg.disabled = true;
+
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    return userCredential.user.updateProfile({ displayName: username });
+                })
+                .then(() => {
+                    alert("Đăng ký thành công!");
+                    window.location.href = "./login.html";
+                })
+                .catch((error) => {
+                    alert("Lỗi: " + error.message);
+                    btnReg.innerText = "Đăng ký";
+                    btnReg.disabled = false;
+                });
+        });
+    </script>
+</body>
+</html>
